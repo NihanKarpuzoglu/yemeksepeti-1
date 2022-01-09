@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,56 +7,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <?php
-    include 'config.php';
-    $res_id = $_GET["res_id"];  
-    session_start();
     
-    //$con
 
-    if (isset($_POST["add"])){
-        if (isset($_SESSION["cart"])){
-            $item_array_id = array_column($_SESSION["cart"],"product_id");
-            if (!in_array($_GET["menu_id"],$item_array_id)){
-                $count = count($_SESSION["cart"]);
-                $item_array = array(
-                    'product_id' => $_GET["menu_id"],
-                    'item_name' => $_POST["hidden_name"],
-                    'product_price' => $_POST["hidden_price"],
-                    'item_quantity' => $_POST["quantity"],
-                );
-                $_SESSION["cart"][$count] = $item_array;
-                echo '<script>window.location="restaurant.php"</script>';
-            }else{
-                echo '<script>alert("Menü daha önce sepete eklenmiş")</script>';
-                echo '<script>window.location="restaurant.php"</script>';
-            }
-        }else{
-            $item_array = array(
-                'product_id' => $_GET["menu_id"],
-                'item_name' => $_POST["hidden_name"],
-                'product_price' => $_POST["hidden_price"],
-                'item_quantity' => $_POST["quantity"],
-            );
-            $_SESSION["cart"][0] = $item_array;
-        }
-    }
-
-    if (isset($_GET["action"])){
-        if ($_GET["action"] == "delete"){
-            foreach ($_SESSION["cart"] as $keys => $value){
-                if ($value["product_id"] == $_GET["menu_id"]){
-                    unset($_SESSION["cart"][$keys]);
-                    echo ("<script language='JavaScript'>
-                    window.location.href='restaurant.php';
-                    window.alert('Ürün sepetten kaldırılıyor...')
-                    </script>");
-                }
-            }
-        }
-    }
-
-        //$last_sc_id = $_GET["card_id"];
+   <?php
+        include "config.php";
+        /*$result = mysqli_connect($servername,$username,$password) or die("Could not connect to database." .mysqli_error());
+        mysqli_select_db($result,$dbname) or die("Could not select the database." .mysqli_error());*/
+        $res_id = $_GET["res_id"];
+        $last_sc_id = $_GET["card_id"];
 
         $restaurant_query = mysqli_query($conn,"select * from restaurants where $res_id = res_id");
         $restaurant_menu_query = mysqli_query($conn,"select * from menu where $res_id = res_id");
@@ -74,8 +31,8 @@
             $res_s_time = $row[7];
             $res_address = $row[9];
         }
-
-?>
+        $conn->close();
+   ?>
 
     <title>Document</title>
 
@@ -230,8 +187,8 @@
                 <div class="row mt-5"> 
                     <div class="col-16-3" style="z-index: 1; --bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item "><a href="#" style="color: #fa0050;font-size: 11px;">İl ismi </a></li>
-                            <li class="breadcrumb-item active" style="color:black;" aria-current="page"><?php echo $res_name?></li>
+                            <li class="breadcrumb-item "><a href="#" style="color: #fa0050;font-size: 11px;">Ankara İlindeki Döner Restoranları </a></li>
+                            <li class="breadcrumb-item active" style="color:black;" aria-current="page">Döner</li>
                         </ol>
                     </div> 
                 </div>
@@ -249,85 +206,91 @@
                     <div class="card-header fw-bold" style="background-color: #fa0050;color: white;font-size: 11px;">
                         <span>YEMEK SEPETİM</span>
                     </div>
-                    
                     <?php
-                     if(!empty($_SESSION["cart"])){?>
-                        <style>
-                        .empty-basket{
-                            display:none;
-                        }
-                        </style>
-                        <div class="card-body fill-basket border p-0">
-                            <div class="row m-0 pt-2 pb-2" style="background-color:#eff0f2;">
-                                <a class="basket_res_name"  href="restaurant.php?res_id=<?php echo $res_id; ?>" ><span> <?php echo $res_name?></span>,<span> <?php echo $res_address ?></span></a>
-                            </div>   
-                        </div>
-                        <?php
-                        $total = 0;
-                        foreach ($_SESSION["cart"] as $key => $value) {
+                        if(isset($_POST['add_to_basket1']) && isset($_POST['add_to_basket2']))
+                        {
+                           
+                            include "config.php";
+                            $result = mysqli_connect($servername,$username,$password) or die("Could not connect to database." .mysqli_error());
+                            mysqli_select_db($result,$dbname) or die("Could not select the database." .mysqli_error());
+                            $menu_id = $_POST["add_to_basket1"];
+                            $card_id = $_POST['add_to_basket2'];
+                            echo "menu id". $menu_id;
+                            echo "card id". $card_id;
+                            $sql_order_detail = "INSERT INTO order_details (order_id, menu_id) VALUES ('$card_id','$menu_id')";
+                            if ($result->query($sql_order_detail) === TRUE) {
+                                
+                            } 
+                            else
+                            {
+                                echo "Hata!";
+                            }
                             ?>
-                            <div class="row m-1">
-                                <div class="col-5" style="display:inline;float:left;max-width:110px;">
-                                    <span ><?php echo $value["item_name"]; ?></span>
-                                </div>
-                                <div class="col-auto" style="display:inline;float:left;">
-                                    <span ><?php echo $value["item_quantity"]; ?></span>
-                                </div>
-                                <div class="col-auto">
-                                    <span ><?php echo $value["product_price"]; ?></span>
-                                </div>
-                                <div class="col-auto">
-                                    <span> <?php echo number_format($value["item_quantity"] * $value["product_price"], 2); ?> TL</span>
-                                </div>
-                                <div class="col-auto">
-                                    <span><a href="restaurant.php?action=delete&menu_id=<?php echo $value["product_id"]; ?>">
-                                    <span class="text-danger">x</span></a></span>
+                            <div class="card-body fill-basket border p-0">
+                                <div class="row m-0 pt-2 pb-2" style="background-color:#eff0f2;">
+                                        <a class="basket_res_name"  href="restaurant.php?res_id=<?php echo $res_id; ?>" ><span> <?php echo $res_name?></span>,<span> <?php echo $res_address ?></span></a>
                                 </div>
                             </div>
-                            
-                                
-                                    
-                                
-                            <?php
-                            $total = $total + ($value["item_quantity"] * $value["product_price"]);
-                        }
-                            ?>
-                            <div class="row d-flex mt-3 m-1" style="justify-content:space-between">
-                                <div class="col-auto">
-                                    <span class="fw-bold" style="">Toplam</span>
-                                </div>
-                                <div class="col-auto">
-                                    <span style="color:#fa0050;font-weight:600;"> <?php echo number_format($total, 2); ?> TL</span>
-                                </div>
-                                
-                                
-                            </div>
-                            <div class="row p-0 m-0 mt-2">
-                                <button type="button" class="btn btn-success p-2 m-0">Sepete Ekle</button>
-                            </div>
-                            <?php
-                        }
-                        else
-                        {  ?>
+                            <style>
+                                .empty-basket{
+                                    display:none;
+                                }
+                            </style>
+
+                    <?php 
+                        } ?>
+                        
                             <div class="card-body empty-basket">
                                 <i class="fa fa-shopping-basket p-1"  style="font-size:30px;color:grey;width:auto;float: left;margin-right: 0.5em;"></i>
                                 <span class="fw-bold ">Sepetiniz henüz boş.</span>
                                 
                             </div>  
-                  <?php }
-                    ?>                           
-                  
-
-                        
-                           
-                            
-                            
-
-                
-                        
                 </div>
 
 
+
+               <!-- <div class="row w-100 p-0 m-0">
+                    <div class="row modul1_header" style="background-color: #fa0050;">
+                        <span>YEMEK SEPETİM</span>
+                    </div>
+                    <div class="row border rounded-bottom">
+                        <div class="itemList d-none">
+                            <table>
+                                <tbody class="items">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="noItem">
+                            <i class="fa fa-shopping-basket p-1"  style="font-size:30px;color:grey;"></i><span class="fw-bold">Sepetiniz henüz boş.</span>
+                        </div>
+                    </div>
+                </div>-->
+        
+                <!--<div class="row w-100 mt-4 border border-1 rounded-3" style="background-color: #eff0f2;">
+                    <div class="row w-100 p-3">
+                        <div class="col-md-3">
+                            <img class="user_img" src="https://profile.yemeksepeti.com/fb/2379/94EB0F6629D88D2DA5D40ED607C5217C.png">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="user_name"><span class="user_name_span fw-bold" style="color: #fa0050;">Ayşe Züleyha İnal</span></div>
+                        </div>
+                        <div class="col-md-2 d-flex justify-content-end">
+                            <div class="dropdown">
+                                <button class="btn btn-sm dropdown-toggle mt-1" style="background-color:rgb(170, 168, 168);" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="#">Bildirimlerim</a></li>
+                                <li><a class="dropdown-item" href="#">Profilim</a></li>
+                                <li><a class="dropdown-item" href="#">Sipairişlerim</a></li>
+                                <li><a class="dropdown-item" href="#">Favorilerim</a></li>
+                                <li><a class="dropdown-item" href="#">Adreslerim</a></li>
+                                <li><a class="dropdown-item" href="#">Bilgilerim</a></li>
+                                </ul>
+                            </div>
+                        </div> 
+                    </div>
+                </div>-->
 
                 <div class="card menu-card mt-3">
                     <div class="card-body userinfo" style="background-color: #eff0f2;">
@@ -352,7 +315,24 @@
                     </div>
                 </div>
 
-    
+        
+
+
+        
+               <!-- <div class="row pt-4 pb-4 mt-4 border rounded-3 w-100">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <svg width="30px" height="30px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="wallet" class="svg-inline--fa fa-wallet" role="img" viewBox="0 0 512 512"><path fill="#fa0050" d="M448 32C465.7 32 480 46.33 480 64C480 81.67 465.7 96 448 96H80C71.16 96 64 103.2 64 112C64 120.8 71.16 128 80 128H448C483.3 128 512 156.7 512 192V416C512 451.3 483.3 480 448 480H64C28.65 480 0 451.3 0 416V96C0 60.65 28.65 32 64 32H448zM416 336C433.7 336 448 321.7 448 304C448 286.3 433.7 272 416 272C398.3 272 384 286.3 384 304C384 321.7 398.3 336 416 336z"/></svg>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="fw-bold">CÜZDAN</span>
+                        </div>
+                        <div class="col-md-7 d-flex justify-content-end">
+                            <span class="fw-bold" style="color:#fa0050">0.00 TL</span>
+                        </div>
+                    </div>
+                </div>-->
+
                 <div class="card menu-card mt-3">
                     <div class="card-body wallet">
                    
@@ -363,6 +343,10 @@
                      
                     </div>
                 </div>
+
+
+
+
 
             </div>
 
@@ -411,52 +395,118 @@
                     
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        
                         <div class="tab-pane active mt-3" id="menu" role="tabpanel" aria-labelledby="menu-tab">
                             
                             <div class="card menu-card">
                                 <div class="card-header fw-bold fs-6">
-                                  Menüler
+                                  Başlangıçlar
                                 </div>
                                 <div class="card-body">
                                     <div class="row d-flex">
-                                        <?php  
-                                                 if(mysqli_num_rows($restaurant_menu_query) > 0) {
-                                                    foreach($restaurant_menu_query as $items) {
 
+
+                                        <?php
+
+                                           if(mysqli_num_rows($restaurant_menu_query) > 0)
+                                            {
+                                                foreach($restaurant_menu_query as $items)
+                                                {
                                         ?>
-                                                                            
+                                        
                                                     <div class="col-auto mt-3" style="max-width: 190px;">
-                                                        <form method="post" action="restaurant.php?action=add&menu_id=<?php echo $items["menu_id"]; ?>">
-                                                            <div class="menu" style="display:inline;">
-                                                                <img src="<?php echo $items['img_path'];?>" style="height: 170px;display: block;">
-                                                                <a  class="menu-name fw-bold pt-2" href="#menu"><?php echo $items['menu_name'];?></a>
-                                                                <span  class="fw-bold" style="display: block;"><?php echo $items['description'];?></span>
-                                                                <input type="text" name="quantity" class="form-control m-0" value="1" style="display:inline;max-width:30px;padding:1px 8px;">
-                                                                <input type="hidden" name="hidden_name" value="<?php echo $items["menu_name"]; ?>">
-                                                                <input type="hidden" name="hidden_price" value="<?php echo $items["price"]; ?>">
-                                                                <input type="submit" name="add" style="margin-top: 5px;border:none;" class="point-add mt-2" value="+">
-                                                                <span class="fw-bold" style="color:#fa0050;font-size: 13px;"><?php echo $items['price'];?> TL</span>                                                      
+                                                        <img src="<?php echo $items['img_path'];?>" style="height: 170px;display: block;">
+                                                        <a  class="menu-name fw-bold pt-2" href="#menu"><?php echo $items['menu_name'];?></a>
+                                                        <span  class="fw-bold" style="display: block;"><?php echo $items['description'];?></span>
+                                                        <a data-bs-toggle="modal" data-bs-target="#add_to_basket">
+                                                            <div class="point-add mt-2">+</div>
+                                                        </a>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="add_to_basket" tabindex="-1" aria-labelledby="add_to_basket_Label" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="add_to_basket_Label" style="font-weight:600;"><?php echo $items['menu_name'];?></h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                        </form>
+                                                            <div class="modal-body">
+                                                                <span style="float:left;"><?php echo $items['description'];?></span>
+                                                                <span style="float:right;font-size:14px;color:#fa0050;font-weight:600;"><?php echo $items['price'];?> TL</span>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Kapat</button>
+
+                                                                
+                                                                
+                                                                <form method="post" action="file.php">
+                                                                  
+                                                                    <input onclick="myFunction(<?php echo $items['menu_id'];?>)" class="btn btn-success" type="submit" name="action" value="Sepete Ekle"/>
+                                                                    <input type="hidden" name="<?php echo $items['menu_id'];?>" id = '<?php echo $items['menu_id'];?>' value="<?php echo $items['menu_id'];?>"/>
+                                                                   <!-- <input type="hidden" name="add_to_basket2" value="<?php echo $last_sc_id;?>"/>-->
+                                                                </form> 
+                                                               
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                        </div>
+                                                        <span class="fw-bold" style="color:#fa0050;font-size: 13px;"><?php echo $items['price'];?> TL</span>
                                                     </div>   
 
                                            <?php
                                                 }
                                             }
-    
-                                            ?>
-      
+                                            else
+                                            {?>
+                                                <span>Not Found</span>
+                                        <?php
+                                            }
+                                            
+                                        ?>-->
                                         
 
+
+
+
+                                        <div class="col-auto mt-3" style="max-width: 190px;">
+                                            <img src="https://cdn.yemeksepeti.com/ProductImages/TR_ANKARA/yildiz_aspava/soslusoganlikasarlidonerdurum_20210306122524_big.jpg" style="height: 170px;display: block;">
+                                            <a  class="menu-name fw-bold pt-2" href="#menu">Menu Adı</a>
+                                            <span  class="fw-bold" style="display: block;">Menu içerik Menu içerik Menu içerik Menu içerik</span>
+                                            <a>
+                                                <div class="point-add mt-2">+</div>
+                                            </a>
+                                            <span class="fw-bold" style="color:#fa0050;font-size: 13px;">Price</span>
+                                        </div>
+                                        <div class="col-auto mt-3" style="max-width: 190px;">
+                                            <img src="https://cdn.yemeksepeti.com/ProductImages/TR_ANKARA/yildiz_aspava/soslusoganlikasarlidonerdurum_20210306122524_big.jpg" style="height: 170px;display: block;">
+                                            <a  class="menu-name fw-bold pt-2" href="#menu">Menu Adı</a>
+                                            <span  class="fw-bold" style="display: block;">Menu içerik Menu içerik Menu içerik Menu içerik</span>
+                                            <a>
+                                                <div class="point-add mt-2">+</div>
+                                            </a>
+                                            <span class="fw-bold" style="color:#fa0050;font-size: 13px;">Price</span>
+                                        </div>
+                                        <div class="col-auto mt-3" style="max-width: 190px;">
+                                            <img src="https://cdn.yemeksepeti.com/ProductImages/TR_ANKARA/yildiz_aspava/soslusoganlikasarlidonerdurum_20210306122524_big.jpg" style="height: 170px;display: block;">
+                                            <a  class="menu-name fw-bold pt-2" href="#menu">Menu Adı</a>
+                                            <span  class="fw-bold" style="display: block;">Menu içerik Menu içerik Menu içerik Menu içerik</span>
+                                            <a>
+                                                <div class="point-add mt-2">+</div>
+                                            </a>
+                                            <span class="fw-bold" style="color:#fa0050;font-size: 13px;">Price</span>
+                                        </div>
+                                        <div class="col-auto mt-3" style="max-width: 190px;">
+                                            <img src="https://cdn.yemeksepeti.com/ProductImages/TR_ANKARA/yildiz_aspava/soslusoganlikasarlidonerdurum_20210306122524_big.jpg" style="height: 170px;display: block;">
+                                            <a  class="menu-name fw-bold pt-2" href="#menu">Menu Adı</a>
+                                            <span  class="fw-bold" style="display: block;">Menu içerik Menu içerik Menu içerik Menu içerik</span>
+                                            <a>
+                                                <div class="point-add mt-2">+</div>
+                                            </a>
+                                            <span class="fw-bold" style="color:#fa0050;font-size: 13px;">Price</span>
+                                        </div> 
                                     </div>
-                                        
                                 </div>
-                            </div>
-                                    
+                              </div>
 
                         </div>
-                              
 
                         <div class="tab-pane" id="info" role="tabpanel" aria-labelledby="info-tab">
                             <div class="card menu-card mt-3">
@@ -531,7 +581,30 @@
                                 <?php           }
                                             }
                                 ?>
-
+                              <!--  <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-auto w-75">
+                                            <span>
+                                                Hız: <span class="speed">10 |</span> Servis: <span class="service">10 |</span> Lezzet: <span class="flavor">10</span>
+                                                
+                                            </span>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span>
+                                                <span class="date" style="margin-right: 0;">1/8/2021</span>
+                                            </span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="row mt-1">
+                                        <div class="col-auto">
+                                            <i class="fa fa-user" style="font-size: 25px;"></i>
+                                        </div>
+                                        <div class="col-auto">
+                                            <span class="user-comment" style="display: block;">Lorem ipsum dolor</span>
+                                        </div>
+                                    </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -540,11 +613,6 @@
         </div>
     </div>
     </div>
-
-
-
-                                                    
-                                             
 
 
       </script>

@@ -449,7 +449,13 @@
                                     </div>
 
                                     <div class="col-9 resinfo">
-                                        <a class="res_name"  href="restaurant.php?res_id=<?php echo $items['res_id']; ?>"><?php echo $items['name'];?>, <?php echo $items['address'];?></a>
+                                        <?php $sql = "INSERT INTO shopping_card (user_id) VALUES ('1')";
+                                            if ($conn->query($sql) === TRUE) 
+                                            {
+                                                $last_sc_id = $conn->insert_id;
+                                            }  
+                                        ?>
+                                        <a class="res_name"  href="restaurant.php?res_id=<?php echo $items['res_id']; ?>&card_id=<?php echo $last_sc_id; ?>"><?php echo $items['name'];?>, <?php echo $items['address'];?></a>
                                     </div>
                                 </div>
                             <div class="row">
