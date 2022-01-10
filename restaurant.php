@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <?php
-    include 'config.php';
-    $res_id = $_GET["res_id"];  
+    include 'config2.php';
+    $res_id;  
     session_start();
     
     //$con
@@ -59,13 +59,21 @@
 
         //$last_sc_id = $_GET["card_id"];
 
-        $restaurant_query = mysqli_query($conn,"select * from restaurants where $res_id = res_id");
-        $restaurant_menu_query = mysqli_query($conn,"select * from menu where $res_id = res_id");
-        $restaurant_comment_query = mysqli_query($conn,"select * from feedbacks where $res_id = res_id");
+        $restaurant_query = mysqli_query($conn,"select * from restaurants where res_id='$res_id'");
+        $restaurant_menu_query = mysqli_query($conn,"select * from menu where res_id='$res_id'");
+        $restaurant_comment_query = mysqli_query($conn,"select * from feedbacks where res_id='$res_id'");
 
-        
+        while($row=$restaurant_query->fetch_assoc())
+		{
+            $res_name = $row['name'];
+		    $res_desc = $row['descriptions'];
+            $res_img_path = $row['img_path'];
+            $res_min_price = $row['min_price'];
+            $res_s_time = $row['service_time'];
+            $res_address = $row['address'];
+        }
 
-        while($row = mysqli_fetch_row($restaurant_query))
+        /*while($row = mysqli_fetch_row($restaurant_query))
 	    {
             $res_name = $row[1];
 		    $res_desc = $row[2];
@@ -73,7 +81,7 @@
             $res_min_price = $row[6];
             $res_s_time = $row[7];
             $res_address = $row[9];
-        }
+        }*/
 
 ?>
 

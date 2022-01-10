@@ -1,0 +1,207 @@
+html {
+    -webkit-tap-highlight-color: transparent;
+	-webkit-text-size-adjust: 100%;
+}
+*, :after, :before {
+    box-sizing: border-box;
+}
+body {
+    background-color: #fff;
+    font-size: 11px;	
+    color: #333;
+    position: relative;
+    height: 100%;
+	line-height: 1.42857;
+	margin: 0;
+}
+body.cleanLayout header.main, body.sticky header.main {
+    height: 78px;
+    position: relative;
+    z-index: 1049;
+}
+header {
+    min-width: 1009px;
+}
+body.cleanLayout header.inner, body.sticky header.inner {
+    position: fixed;
+    top: 0;
+    height: 80px;
+    width: 100%;
+    z-index: 2;
+}
+body.sticky .main .container, body.sticky ,header.main .row {
+    height: 80px;
+	margin-bottom:40px;
+	margin-left:0px;
+	margin-right:0px;
+}
+header .inner {
+    background: #fa0050;
+    margin-top: -2px;
+	margin-bottom:10px;
+	margin-bottom:10px;
+}
+@media (min-width: 1px)
+	.container {
+		width: 1009px;
+}
+.col-sm-4{
+    position: relative;
+    min-height: 1px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+body.sticky header .inner .container .form {
+    top: 20px;
+}
+.ys-main {
+    padding-top: 20px;
+    background-color: #fff;
+}
+.col-16-9{
+    padding-left: 6px;
+    padding-right: 6px;
+    float: left;
+    position: relative;
+    min-height: 1px;
+	width: 56.25%;
+}
+.col-16-7{
+    padding-left: 6px;
+    padding-right: 6px;
+    float: left;
+    position: relative;
+    min-height: 1px;
+	width: 43.75%;
+}
+.login .left-side {
+    padding-left: 65px;
+}
+.login .login-panel {
+    border-right: 1px solid #e5e5e5;
+    width: 95%;
+    padding: 0 120px 0 40px;
+}
+.h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.login #login-form {
+    width: 100%;
+}
+.login .form-group {
+    margin-left: 0!important;
+    margin-right: 0!important;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+input[type=password], input[type=text] {
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    background-clip: padding-box;
+    background-color: #fff;
+    box-shadow: 0 -1px 0 rgb(51 51 51 / 20%);
+}
+.ys-btn.ys-btn-primary[disabled=disabled], .ys-btn.ys-btn-primary[disabled] {
+    background-color: #ade1c9;
+    border-color: #ade1c9;
+}
+.login .ys-btn.ys-btn-lg {
+    font-size: 14px;
+}
+.ys-btn.ys-btn-primary {
+    background-color: #29cc81;
+    color: #fff;
+}
+.ys-btn.ys-btn-block {
+    display: block;
+    width: 100%;
+}
+.ys-btn.ys-btn-lg {
+    display: block;
+    padding: 10px 40px;
+}
+.ys-btn[disabled=disabled], .ys-btn[disabled] {
+    background-color: #f4ddb7;
+    border-color: #f4ddb7;
+}
+button[disabled], html input[disabled] {
+    cursor: default;
+}
+.ys-btn {
+    text-align: center;
+    white-space: nowrap;
+    border: 0;
+    user-select: none;
+    border-radius: 3px;
+    background-clip: padding-box;
+    transition: background .15s ease-in,background-color .15s ease-in,color .1s ease-in,top .1s ease-in;
+    text-decoration: none;
+    position: relative;
+    top: 0;
+    font-weight: 700;
+    font-family: Open Sans,sans-serif;
+    vertical-align: top;
+    outline: none!important;
+}
+button{
+    line-height: inherit;
+	-webkit-appearance: button;
+    cursor: pointer;
+	text-transform: none;
+	overflow: visible;
+	font: inherit;
+    margin: 0;
+}
+button:disabled {
+    background-color: -internal-light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3));
+    color: -internal-light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3));
+    border-color: -internal-light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3));
+}
+user agent stylesheet
+.login h3 {
+    font-weight: 700;
+    font-size: 18px;
+}
+h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.login .info-container {
+    margin-top: 20px;
+	margin-bottom: 20px;
+    height: 225px;
+}
+.login .info-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.login .info-icon {
+    margin-right: 36px;
+}
+svg:not(:root) {
+    overflow: hidden;
+}
+svg[Attributes Style] {
+    width: 30;
+    height: 30;
+}
+.login .ys-userDetails a {
+    font-weight: 600;
+}
+.login .ys-userDetails {
+    width: 100%;
+	clear: both;
+    display: inline-block;
+    margin: 20px 5px;
+    font-size: 12px;
+}
+}
